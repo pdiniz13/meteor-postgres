@@ -264,7 +264,7 @@ ActiveRecord.prototype.order = function (/*arguments*/) {
   } else {
     args = arguments[0];
   }
-  this.orderString = 'ORDER BY ' + args;
+  this.orderString = ' ORDER BY ' + args;
   return this;
 };
 
@@ -337,6 +337,7 @@ ActiveRecord.prototype.take = function (limit) {
 };
 
 
+
 // Data function that retrieves data from database
 ActiveRecord.prototype.fetch = function (cb) {
 
@@ -366,6 +367,18 @@ ActiveRecord.prototype.fetch = function (cb) {
     });
   });
   this.clearAll();
+};
+
+ActiveRecord.prototype.returnString = function (){
+  var table = this.table;
+  var dataArray = this.dataArray;
+  var prevFunc = this.prevFunc;
+
+  var starter = this.updateString || this.deleteString || this.selectString;
+
+  var input = this.inputString.length > 0 ? this.inputString : starter + this.joinString + this.whereString + this.orderString + this.limitString +
+  this.offsetString + this.groupString + this.havingString + ';';
+  return input;
 };
 
 // Data function that saves information to database
@@ -398,8 +411,8 @@ ActiveRecord.prototype.save = function (cb) {
 // Data function that clears all strings after a fetch or save
 ActiveRecord.prototype.clearAll = function() {
   this.inputString = '';
-  this.autoSelectData = '';
-  this.autoSelectInput = '';
+  //this.autoSelectData = '';
+  //this.autoSelectInput = '';
 
   // statement starters
   this.selectString = '';

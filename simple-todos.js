@@ -52,6 +52,8 @@ if (Meteor.isClient) {
     },
     "change .catselect": function(event){
       console.log(event.target.value);
+      tasks.initSelect(event.value);
+      console.log(this);
     }
   });
 
@@ -86,8 +88,10 @@ if (Meteor.isServer) {
     remove: function(table, paramObj){
       tasks.ActiveRecord.remove().where("_id = ?", paramObj._id.$eq).save();
     },
-    createTable: function(table, paramObj){
-      tasks.createTable(table, paramObj);
+    initSelect: function(name){
+      tasks.ActiveRecord.autoSelectInput = tasks.ActiveRecord.select('tasks._id', 'tasks.text', 'tasks.checked', 'tasks.created_at').join(['INNER JOIN'], ["users1_id"], [["users1", '_id']]).where("users1.name = ?", name).order('created_at DESC').limit(10).returnString();
+      tasks.ActiveRecord.autoSelect = tasks.ActiveRecord.dataArray;
+      console.log('new select ===========', tasks.ActiveRecord.autoSelectInput);
     }
   });
 

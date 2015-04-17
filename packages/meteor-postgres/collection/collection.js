@@ -55,6 +55,10 @@ SQL.Collection = function(connection, name) {
     Meteor.call('update', this.tableName, dataObj, selectObj);
   };
 
+  this.initSelect = function(name){
+    Meteor.call('initSelect', name);
+  };
+
   this.remove = function(dataObj) {
     minisql.remove(this.tableName, dataObj);
     reactiveData.changed();
